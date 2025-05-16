@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Loja de Produtos</title>
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Roboto:wght@400;500&display=swap"
+        rel="stylesheet"
+    />
+    <style>
+        /* Seu CSS original mantido */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5, #eceff1);
+            min-height: 100vh;
+            padding: 50px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle,
+                rgba(44, 147, 232, 0.1) 1%,
+                transparent 1%
+            );
+            background-size: 20px 20px;
+            opacity: 0.3;
+            z-index: -1;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .header {
+            background: linear-gradient(135deg, #ffffff, #f0f4f8);
+            padding: 40px;
+            border-radius: 25px;
+            border: 1px solid rgba(44, 147, 232, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 50px;
+            animation: slideIn 1.2s ease-in-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .header h1 {
+            font-family: 'Poppins', sans-serif;
+            color: #4a4a4a;
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .header .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #4a4a4a;
+            font-size: 18px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .header .back-link:hover {
+            color: #2c93e8;
+            transform: translateX(-10px);
+        }
+        .visitor-notice {
+            background: linear-gradient(135deg, #e8ecef, #d5dbe0);
+            color: #4a4a4a;
+            padding: 18px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 17px;
+            font-weight: 400;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .visitor-notice:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 40px;
+            padding: 30px;
+        }
+        .product-card {
+            background: transparent;
+            border-radius: 25px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+            padding: 35px;
+            text-align: center;
+            transition: transform 0.5s ease, box-shadow 0.5s ease,
+                background-color 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInCard 0.8s ease-in-out forwards;
+            animation-delay: calc(var(--index) * 0.2s);
+            opacity: 0;
+        }
+        .product-card:nth-child(1) {
+            --index: 1;
+        }
+        .product-card:nth-child(2) {
+            --index: 2;
+        }
+        .product-card:nth-child(3) {
+            --index: 3;
+        }
+        .product-card:nth-child(4) {
+            --index: 4;
+        }
+        @keyframes fadeInCard {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .product-card:hover {
+            transform: translateY(-15px) scale(1.03) rotate(1deg);
+            box-shadow: 0 20px 50px rgba(44, 147, 232, 0.2);
+            background-color: rgba(44, 147, 232, 0.8);
+        }
+        .product-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 2px solid rgba(44, 147, 232, 0.2);
+            transition: transform 0.4s, box-shadow 0.4s;
+        }
+        .product-card:hover img {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(44, 147, 232, 0.3);
+        }
+        .product-card h3 {
+            font-family: 'Poppins', sans-serif;
+            color: #4a4a4a;
+            font-size: 26px;
+            font-weight: 600;
+            margin: 15px 0;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .product-card p {
+            color: #666;
+            font-size: 17px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        .product-card .price {
+            color: #4a4a4a;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #d5efff, #ffffff);
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: inset 0 2px 8px rgba(44, 147, 232, 0.2);
+        }
+        .product-card button {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #a0a0a0, #7a7a7a);
+            color: #fff;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: not-allowed;
+            transition: transform 0.4s, background 0.4s, box-shadow 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-card button.enabled {
+            background: linear-gradient(135deg, #4a4a4a, #2a2a2a);
+            cursor: pointer;
+        }
+        .product-card button.enabled:hover {
+            background: linear-gradient(135deg, #2c93e8, #1a73c8);
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(44, 147, 232, 0.5);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1.08);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1.08);
+            }
+        }
+        .product-card i {
+            margin-right: 12px;
+            font-size: 22px;
+            transition: transform 0.4s;
+        }
+        .product-card button:hover i {
+            transform: translateX(5px);
+        }
+        /* Estilos do Painel de Progresso */
+        .progress-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ffffff, #f0f4f8);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+            animation: slideInPanel 0.5s ease-in-out;
+            z-index: 1000;
+        }
+        @keyframes slideInPanel {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .progress-panel h3 {
+            font-family: 'Poppins', sans-serif;
+            color: #4a4a4a;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        .item-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .item-dot {
+            width: 15px;
+            height: 15px;
+            background: #e8ecef;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s, border 0.3s;
+        }
+        .item-dot.selected {
+            background: linear-gradient(135deg, #2c93e8, #1a73c8);
+            border: 2px solid rgba(44, 147, 232, 0.5);
+            transform: scale(1.3);
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 15px;
+            background: #e8ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .progress-bar {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(135deg, #2c93e8, #1a73c8);
+            transition: width 5s linear;
+        }
+        .progress-text {
+            font-size: 16px;
+            color: #4a4a4a;
+            margin-bottom: 15px;
+        }
+        .progress-panel button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #a0a0a0, #7a7a7a);
+            color: #fff;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            margin-top: 10px;
+        }
+        .progress-panel button:hover {
+            background: linear-gradient(135deg, #2c93e8, #1a73c8);
+            transform: scale(1.05);
+        }
+
+        /* Botão fixo Suporte */
+        #supportBtn {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #2c93e8, #1a73c8);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(44, 147, 232, 0.6);
+            z-index: 1100;
+        }
+
+        /* Modal Suporte */
+        #supportModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1200;
+            justify-content: center;
+            align-items: center;
+        }
+        #supportModal .modal-content {
+            background: white;
+            padding: 25px 35px;
+            border-radius: 20px;
+            width: 350px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        #supportModal h2 {
+            margin-bottom: 20px;
+            color: #2c93e8;
+            font-weight: 700;
+        }
+        #supportModal label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        #supportModal input,
+        #supportModal textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        #supportModal button.send-btn {
+            margin-top: 15px;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #2c93e8, #1a73c8);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(44, 147, 232, 0.6);
+        }
+        #supportModal button.send-btn:hover {
+            background: linear-gradient(135deg, #1a73c8, #1663b8);
+        }
+        #supportModal button.close-btn {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #2c93e8;
+        }
+
+        /* Botão flutuante de contato */
+        #contactFloatingBtn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1500;
+        }
+        #contactFloatingBtn button {
+            background: linear-gradient(135deg, #2c93e8, #1a73c8);
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(44, 147, 232, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+        #contactFloatingBtn button:hover {
+            background: linear-gradient(135deg, #1a73c8, #1663b8);
+        }
+        #contactMenu {
+            display: none;
+            margin-top: 10px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+        }
+        #contactMenu p {
+            margin: 0 0 10px 0;
+            font-weight: 600;
+            color: #2c93e8;
+        }
+        #contactMenu a {
+            margin: 0 8px;
+            color: inherit;
+            text-decoration: none;
+            display: inline-block;
+        }
+        #contactMenu a:hover i {
+            transform: scale(1.2);
+        }
+        #contactMenu i {
+            font-size: 32px;
+            transition: transform 0.3s ease;
+        }
+        #contactMenu a:nth-child(2) i {
+            color: #25d366; /* WhatsApp green */
+        }
+        #contactMenu a:nth-child(3) i {
+            color: #5865f2; /* Discord blue */
+        }
+        #contactMenu a:nth-child(4) i {
+            color: #c13584; /* Instagram gradient */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Loja de Produtos</h1>
+            <p class="visitor-notice">
+                Você está visualizando como visitante. Faça login para comprar produtos.
+            </p>
+            <a href="index.html" class="back-link"
+                ><i class="fas fa-arrow-left"></i> Voltar ao Login</a
+            >
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="inventory-management.png" alt="Carro Esportivo" />
+                <h3>Carro Esportivo</h3>
+                <p>Um veículo rápido e estiloso para suas aventuras no servidor.</p>
+                <div class="price">R$ 500,00</div>
+                <button
+                    class="enabled"
+                    data-product="Carro Esportivo"
+                    data-price="500"
+                >
+                    <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+                </button>
+            </div>
+            <div class="product-card">
+                <img src="inventory-management.png" alt="Arma Personalizada" />
+                <h3>Arma Personalizada</h3>
+                <p>Arma com design exclusivo e alta precisão.</p>
+                <div class="price">R$ 50,00</div>
+                <button
+                    class="enabled"
+                    data-product="Arma Personalizada"
+                    data-price="50"
+                >
+                    <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+                </button>
+            </div>
+            <div class="product-card">
+                <img src="inventory-management.png" alt="Roupa VIP" />
+                <h3>Roupa VIP</h3>
+                <p>Roupas exclusivas para se destacar no servidor.</p>
+                <div class="price">R$ 20,00</div>
+                <button
+                    class="enabled"
+                    data-product="Roupa VIP"
+                    data-price="20"
+                >
+                    <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+                </button>
+            </div>
+            <div class="product-card">
+                <img src="inventory-management.png" alt="Pacote de Moedas" />
+                <h3>Pacote de Moedas</h3>
+                <p>1.000 moedas para usar na loja do servidor.</p>
+                <div class="price">R$ 10,00</div>
+                <button
+                    class="enabled"
+                    data-product="Pacote de Moedas"
+                    data-price="10"
+                >
+                    <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Painel de Progresso -->
+    <div class="progress-panel" id="progressPanel" style="display: none">
+        <h3>Carrinho de Compras</h3>
+        <div
+            id="itemList"
+            style="margin-bottom: 15px; color: #4a4a4a; font-size: 16px"
+        ></div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-text" id="progressText">Total: R$ 0,00</div>
+        <button onclick="closeProgressPanel()">Fechar</button>
+        <button onclick="finalizePurchase()">Finalizar Compra</button>
+    </div>
+
+    <!-- Botão Suporte -->
+    <button id="supportBtn">Suporte</button>
+
+    <!-- Modal Suporte -->
+    <div id="supportModal">
+        <div class="modal-content">
+            <button class="close-btn" title="Fechar">&times;</button>
+            <h2>Suporte</h2>
+            <label for="supportName">Nome</label>
+            <input type="text" id="supportName" />
+            <label for="supportEmail">Email</label>
+            <input type="email" id="supportEmail" />
+            <label for="supportMessage">Mensagem</label>
+            <textarea id="supportMessage" rows="5"></textarea>
+            <button class="send-btn">Enviar</button>
+        </div>
+    </div>
+
+    <!-- Botão flutuante de contato -->
+    <div id="contactFloatingBtn">
+      <button id="toggleContactMenu" aria-label="Abrir menu de contato">
+        <i class="fas fa-comments"></i>
+      </button>
+      <div id="contactMenu">
+        <p>Fale Conosco</p>
+        <a href="https://chat.whatsapp.com/B8QUUOrfqvJ72N667Lq35V" target="_blank" aria-label="WhatsApp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://discord.gg/aQr3z222" target="_blank" aria-label="Discord">
+          <i class="fab fa-discord"></i>
+        </a>
+        <a href="https://www.instagram.com/generico_rp?igsh=MXQ1emk3cHZtenJiOQ==" target="_blank" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+
+    <script>
+        // Carrinho
+        let totalValue = 0;
+        const itemList = document.getElementById("itemList");
+
+        function openProgressPanel() {
+            document.getElementById("progressPanel").style.display = "block";
+        }
+
+        function closeProgressPanel() {
+            document.getElementById("progressPanel").style.display = "none";
+            document.getElementById("progressBar").style.width = "0%";
+            document.getElementById("progressText").textContent = "Total: R$ 0,00";
+            itemList.innerHTML = "";
+            totalValue = 0;
+        }
+
+        function updateProgress(price, productName) {
+            totalValue += price;
+            const progressBar = document.getElementById("progressBar");
+            const progressText = document.getElementById("progressText");
+            const max = 500;
+            const percentage = (totalValue / max) * 100;
+            progressBar.style.width = `${Math.min(percentage, 100)}%`;
+            progressText.textContent = `Total: R$ ${totalValue
+                .toFixed(2)
+                .replace(".", ",")}`;
+
+            const item = document.createElement("div");
+            item.textContent = `${productName} - R$ ${price
+                .toFixed(2)
+                .replace(".", ",")}`;
+            itemList.appendChild(item);
+        }
+
+        document.querySelectorAll(".product-card button.enabled").forEach(
+            (button) => {
+                button.addEventListener("click", () => {
+                    const productName = button.dataset.product;
+                    const price = parseFloat(button.dataset.price);
+                    updateProgress(price, productName);
+                    openProgressPanel();
+                });
+            }
+        );
+
+        // Função para finalizar compra e redirecionar para checkout.html
+        function finalizePurchase() {
+            if (totalValue === 0) {
+                alert("Adicione produtos ao carrinho antes de finalizar a compra.");
+                return;
+            }
+            // Obter os itens do carrinho
+            const items = [...itemList.children].map(el => el.textContent);
+            // Salvar dados no localStorage
+            localStorage.setItem("cartItems", JSON.stringify(items));
+            localStorage.setItem("cartTotal", totalValue.toFixed(2));
+            // Redirecionar para a página de confirmação de compra
+            window.location.href = "checkout.html";
+        }
+
+        // Suporte
+        const supportBtn = document.getElementById("supportBtn");
+        const supportModal = document.getElementById("supportModal");
+        const closeSupportModalBtn = supportModal.querySelector(".close-btn");
+        const sendSupportBtn = supportModal.querySelector(".send-btn");
+
+        supportBtn.addEventListener("click", () => {
+            supportModal.style.display = "flex";
+        });
+
+        closeSupportModalBtn.addEventListener("click", () => {
+            supportModal.style.display = "none";
+        });
+
+        supportModal.addEventListener("click", (e) => {
+            if (e.target === supportModal) {
+                supportModal.style.display = "none";
+            }
+        });
+
+        sendSupportBtn.addEventListener("click", () => {
+            const name = document.getElementById("supportName").value.trim();
+            const email = document.getElementById("supportEmail").value.trim();
+            const message = document.getElementById("supportMessage").value.trim();
+
+            if (!name || !email || !message) {
+                alert("Por favor, preencha todos os campos antes de enviar.");
+                return;
+            }
+
+            alert(
+                "Mensagem enviada! Obrigado pelo contato, " + name + "."
+            );
+
+            document.getElementById("supportName").value = "";
+            document.getElementById("supportEmail").value = "";
+            document.getElementById("supportMessage").value = "";
+            supportModal.style.display = "none";
+        });
+
+        // Menu flutuante de contato
+        const toggleBtn = document.getElementById("toggleContactMenu");
+        const contactMenu = document.getElementById("contactMenu");
+
+        toggleBtn.addEventListener("click", () => {
+            if (contactMenu.style.display === "none" || contactMenu.style.display === "") {
+                contactMenu.style.display = "block";
+            } else {
+                contactMenu.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>

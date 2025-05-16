@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Login Profissional</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #F5F5F5;
+            overflow: hidden;
+        }
+        .login-container {
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 380px;
+            text-align: center;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .login-container h2 {
+            color: #4A4A4A;
+            font-size: 26px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .input-group {
+            position: relative;
+            margin: 15px 0;
+        }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4A4A4A;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #F9F9F9;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .login-container input:focus {
+            outline: none;
+            border-color: #4A4A4A;
+            background-color: #FFFFFF;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 8px;
+            background-color: #4A4A4A;
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: background-color 0.3s;
+        }
+        .login-container button:hover {
+            background-color: #333333;
+        }
+        .login-container button:disabled {
+            background-color: #A0A0A0;
+            cursor: not-allowed;
+        }
+        .visitor-button {
+            background-color: #E0E0E0;
+            color: #4A4A4A;
+        }
+        .visitor-button:hover {
+            background-color: #D0D0D0;
+        }
+        .loader {
+            display: none;
+            border: 2px solid #FFFFFF;
+            border-top: 2px solid #4A4A4A;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        .error, .success {
+            font-size: 14px;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .error {
+            background-color: #FDECEA;
+            color: #D32F2F;
+        }
+        .success {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+        .toggle-link {
+            color: #4A4A4A;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            margin: 10px;
+            display: inline-block;
+            transition: color 0.3s;
+        }
+        .toggle-link:hover {
+            color: #333333;
+            text-decoration: underline;
+        }
+        .form-section {
+            display: none;
+        }
+        .form-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Formulário de Login -->
+        <div id="login-form" class="form-section active">
+            <h2>Entrar</h2>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="login-username" placeholder="Usuário" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="login-password" placeholder="Senha" required>
+            </div>
+            <button onclick="login()" id="login-button">Entrar <span class="loader" id="login-loader"></span></button>
+            <button onclick="guestLogin()" id="guest-button" class="visitor-button">Entrar como Visitante <span class="loader" id="guest-loader"></span></button>
+            <p class="error" id="login-error">Usuário ou senha incorretos</p>
+            <span class="toggle-link" onclick="showForm('register-form')">Criar uma conta</span>
+            <span class="toggle-link" onclick="showForm('recover-form')">Esqueceu a senha?</span>
+        </div>
+        <!-- Formulário de Registro -->
+        <div id="register-form" class="form-section">
+            <h2>Registrar</h2>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="register-username" placeholder="Usuário" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="register-password" placeholder="Senha" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="register-confirm-password" placeholder="Confirmar Senha" required>
+            </div>
+            <button onclick="register()" id="register-button">Registrar <span class="loader" id="register-loader"></span></button>
+            <p class="error" id="register-error"></p>
+            <p class="success" id="register-success">Conta criada com sucesso!</p>
+            <span class="toggle-link" onclick="showForm('login-form')">Já tem uma conta? Entrar</span>
+        </div>
+        <!-- Formulário de Recuperação -->
+        <div id="recover-form" class="form-section">
+            <h2>Recuperar Senha</h2>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="recover-username" placeholder="Usuário" required>
+            </div>
+            <button onclick="recover()" id="recover-button">Enviar <span class="loader" id="recover-loader"></span></button>
+            <p class="success" id="recover-success">Instruções enviadas (verifique o console)!</p>
+            <p class="error" id="recover-error"></p>
+            <span class="toggle-link" onclick="showForm('login-form')">Voltar ao login</span>
+        </div>
+    </div>
+
+    <script>
+        // Simulação de banco de dados (em produção, use um backend)
+        let users = {
+            "admin": { password: "123456" }
+        };
+
+        function showLoader(buttonId, loaderId) {
+            const button = document.getElementById(buttonId);
+            const loader = document.getElementById(loaderId);
+            button.disabled = true;
+            button.textContent = '';
+            loader.style.display = 'block';
+        }
+
+        function hideLoader(buttonId, loaderId, buttonText) {
+            const button = document.getElementById(buttonId);
+            const loader = document.getElementById(loaderId);
+            button.disabled = false;
+            button.textContent = buttonText;
+            loader.style.display = 'none';
+        }
+
+        function login() {
+            showLoader('login-button', 'login-loader');
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errorMessage = document.getElementById('login-error');
+
+            setTimeout(() => {
+                if (!username || !password) {
+                    errorMessage.textContent = "Preencha todos os campos";
+                    errorMessage.style.display = "block";
+                    hideLoader('login-button', 'login-loader', 'Entrar');
+                    return;
+                }
+
+                if (users[username] && users[username].password === password) {
+                    alert("Login bem-sucedido! Redirecionando...");
+                    // window.location.href = "dashboard.html"; // Para usuários autenticados
+                    // Para MTA: triggerServerEvent("onPlayerLogin", localPlayer, username);
+                } else {
+                    errorMessage.textContent = "Usuário ou senha incorretos";
+                    errorMessage.style.display = "block";
+                }
+                hideLoader('login-button', 'login-loader', 'Entrar');
+            }, 1000);
+        }
+
+        function guestLogin() {
+            showLoader('guest-button', 'guest-loader');
+            setTimeout(() => {
+                alert("Entrando como visitante! Redirecionando para a página de produtos...");
+                window.location.href = "products.html";
+                // Para MTA: triggerServerEvent("onGuestLogin", localPlayer);
+                hideLoader('guest-button', 'guest-loader', 'Entrar como Visitante');
+            }, 1000);
+        }
+
+        function register() {
+            showLoader('register-button', 'register-loader');
+            const username = document.getElementById('register-username').value.trim();
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const errorMessage = document.getElementById('register-error');
+            const successMessage = document.getElementById('register-success');
+
+            errorMessage.style.display = "none";
+            successMessage.style.display = "none";
+
+            setTimeout(() => {
+                if (!username || !password || !confirmPassword) {
+                    errorMessage.textContent = "Preencha todos os campos";
+                    errorMessage.style.display = "block";
+                    hideLoader('register-button', 'register-loader', 'Registrar');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    errorMessage.textContent = "As senhas não coincidem";
+                    errorMessage.style.display = "block";
+                    hideLoader('register-button', 'register-loader', 'Registrar');
+                    return;
+                }
+
+                if (username.length < 3) {
+                    errorMessage.textContent = "Usuário deve ter pelo menos 3 caracteres";
+                    errorMessage.style.display = "block";
+                    hideLoader('register-button', 'register-loader', 'Registrar');
+                    return;
+                }
+
+                if (users[username]) {
+                    errorMessage.textContent = "Usuário já existe";
+                    errorMessage.style.display = "block";
+                    hideLoader('register-button', 'register-loader', 'Registrar');
+                    return;
+                }
+
+                users[username] = { password };
+                successMessage.style.display = "block";
+                hideLoader('register-button', 'register-loader', 'Registrar');
+                setTimeout(() => showForm('login-form'), 2000);
+            }, 1000);
+        }
+
+        function recover() {
+            showLoader('recover-button', 'recover-loader');
+            const username = document.getElementById('recover-username').value.trim();
+            const successMessage = document.getElementById('recover-success');
+            const errorMessage = document.getElementById('recover-error');
+
+            errorMessage.style.display = "none";
+            successMessage.style.display = "none";
+
+            setTimeout(() => {
+                if (!username) {
+                    errorMessage.textContent = "Digite o nome de usuário";
+                    errorMessage.style.display = "block";
+                    hideLoader('recover-button', 'recover-loader', 'Enviar');
+                    return;
+                }
+
+                if (!users[username]) {
+                    errorMessage.textContent = "Usuário não encontrado";
+                    errorMessage.style.display = "block";
+                    hideLoader('recover-button', 'recover-loader', 'Enviar');
+                    return;
+                }
+
+                successMessage.style.display = "block";
+                console.log(`Instruções de recuperação enviadas para o usuário: ${username}`);
+                hideLoader('recover-button', 'recover-loader', 'Enviar');
+                setTimeout(() => showForm('login-form'), 2000);
+            }, 1000);
+        }
+
+        function showForm(formId) {
+            document.querySelectorAll('.form-section').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(formId).classList.add('active');
+            document.querySelectorAll('.error, .success').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.querySelectorAll('input').forEach(input => input.value = '');
+            hideLoader('login-button', 'login-loader', 'Entrar');
+            hideLoader('guest-button', 'guest-loader', 'Entrar como Visitante');
+            hideLoader('register-button', 'register-loader', 'Registrar');
+            hideLoader('recover-button', 'recover-loader', 'Enviar');
+        }
+
+        // Suporte para tecla Enter
+        document.getElementById('login-password').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') login();
+        });
+        document.getElementById('register-confirm-password').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') register();
+        });
+        document.getElementById('recover-username').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') recover();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout - Confirmação de Compra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset básico */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fafafa;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 60px 15px;
+      color: #222;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      max-width: 560px;
+      width: 100%;
+      padding: 56px 48px 64px;
+      animation: fadeInUp 0.85s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 2.9rem;
+      color: #111;
+      text-align: center;
+      margin-bottom: 52px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    h2 {
+      font-weight: 600;
+      font-size: 1.45rem;
+      color: #333;
+      border-bottom: 3px solid #e5e5e5;
+      padding-bottom: 14px;
+      margin-top: 56px;
+      margin-bottom: 36px;
+      letter-spacing: 0.03em;
+    }
+
+    ul {
+      list-style-type: disc;
+      padding-left: 26px;
+      margin-bottom: 36px;
+      color: #555;
+      font-size: 1.18rem;
+      line-height: 1.65;
+    }
+
+    ul li {
+      margin-bottom: 14px;
+    }
+
+    .total {
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: #111;
+      margin-bottom: 48px;
+      text-align: right;
+      font-family: 'Inter', sans-serif;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    form label {
+      display: block;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: #444;
+      user-select: none;
+      letter-spacing: 0.02em;
+    }
+
+    form input[type="text"],
+    form input[type="number"],
+    form input[type="month"] {
+      width: 100%;
+      padding: 18px 22px;
+      margin-bottom: 28px;
+      border-radius: 14px;
+      border: 2px solid #ddd;
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: #222;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.07);
+      outline-offset: 4px;
+      outline-color: transparent;
+    }
+
+    form input[type="text"]:focus,
+    form input[type="number"]:focus,
+    form input[type="month"]:focus {
+      border-color: #000;
+      box-shadow: 0 0 14px rgba(0, 0, 0, 0.25);
+      outline-color: #000;
+    }
+
+    .payment-options {
+      display: flex;
+      justify-content: space-between;
+      gap: 22px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .payment-option {
+      flex: 1 1 32%;
+      display: flex;
+      align-items: center;
+      padding: 22px 20px;
+      border-radius: 18px;
+      border: 2px solid #ddd;
+      background: #fafafa;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 600;
+      font-size: 1.15rem;
+      color: #222;
+      transition: all 0.35s ease;
+      position: relative;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+      text-transform: capitalize;
+    }
+
+    .payment-option:hover {
+      border-color: #000;
+      background: #f0f0f0;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
+      color: #000;
+    }
+
+    .payment-option input[type="radio"] {
+      margin-right: 18px;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      accent-color: #000;
+      flex-shrink: 0;
+      position: relative;
+      top: 1px;
+    }
+
+    .payment-option svg,
+    .payment-option img {
+      width: 40px;
+      height: 40px;
+      margin-left: auto;
+      filter: grayscale(100%);
+      transition: filter 0.3s ease;
+      user-select: none;
+      border-radius: 6px;
+      object-fit: contain;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+    }
+
+    .payment-option:hover svg,
+    .payment-option:hover img {
+      filter: grayscale(0%);
+    }
+
+    /* Pix com imagem */
+    .payment-option[data-payment="Pix"] img {
+      width: 44px;
+      height: 44px;
+    }
+
+    button {
+      margin-top: 52px;
+      width: 100%;
+      padding: 20px;
+      background: #000;
+      color: white;
+      font-weight: 700;
+      font-size: 1.35rem;
+      border: none;
+      border-radius: 24px;
+      cursor: pointer;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    button:hover {
+      background: #222;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    .message {
+      margin-top: 42px;
+      text-align: center;
+      font-weight: 700;
+      color: #000;
+      font-size: 1.3rem;
+      user-select: none;
+      min-height: 1.7em;
+      letter-spacing: 0.02em;
+    }
+
+    @media (max-width: 620px) {
+      .payment-options {
+        flex-direction: column;
+      }
+      .payment-option {
+        flex: none;
+        width: 100%;
+        margin-bottom: 24px;
+      }
+      button {
+        font-size: 1.2rem;
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container" role="main" aria-labelledby="checkout-title">
+    <h1 id="checkout-title">Confirmação de Compra</h1>
+
+    <section aria-label="Resumo do carrinho" id="cartSummary" tabindex="0">
+      <!-- Produtos e total vão aqui -->
+    </section>
+
+    <form id="paymentForm" aria-describedby="confirmationMessage" novalidate>
+      <h2>Dados do Pagamento</h2>
+
+      <label for="cardName">Nome no Cartão</label>
+      <input
+        type="text"
+        id="cardName"
+        name="cardName"
+        placeholder="Nome do titular"
+        required
+        autocomplete="cc-name"
+        aria-required="true"
+      />
+
+      <label for="cardNumber">Número do Cartão</label>
+      <input
+        type="text"
+        id="cardNumber"
+        name="cardNumber"
+        maxlength="19"
+        placeholder="XXXX XXXX XXXX XXXX"
+        pattern="\\d{13,19}"
+        required
+        autocomplete="cc-number"
+        aria-required="true"
+      />
+
+      <label for="expiryDate">Validade</label>
+      <input
+        type="month"
+        id="expiryDate"
+        name="expiryDate"
+        min="2023-01"
+        required
+        autocomplete="cc-exp"
+        aria-required="true"
+      />
+
+      <label for="cvv">CVV</label>
+      <input
+        type="number"
+        id="cvv"
+        name="cvv"
+        min="100"
+        max="9999"
+        placeholder="Código de segurança"
+        required
+        autocomplete="cc-csc"
+        aria-required="true"
+      />
+
+      <h2>Opções de Pagamento</h2>
+      <div class="payment-options" role="radiogroup" aria-label="Métodos de pagamento">
+        <label class="payment-option" for="creditCard" data-payment="Cartão de Crédito">
+          <input
+            type="radio"
+            id="creditCard"
+            name="paymentMethod"
+            value="Cartão de Crédito"
+            checked
+          />
+          Cartão de Crédito
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.103 0-2 .897-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 2v1H4V6h16zM4 18V9h16l.002 9H4z"></path></svg>
+        </label>
+        <label class="payment-option" for="boleto" data-payment="Boleto Bancário">
+          <input
+            type="radio"
+            id="boleto"
+            name="paymentMethod"
+            value="Boleto Bancário"
+          />
+          Boleto Bancário
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="6" width="16" height="12" rx="2" ry="2" fill="none" stroke="#999" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></rect><line x1="4" y1="10" x2="20" y2="10" stroke="#999" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></line><line x1="10" y1="6" x2="10" y2="18" stroke="#999" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></line><line x1="7" y1="6" x2="7" y2="18" stroke="#999" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></line><line x1="13" y1="6" x2="13" y2="18" stroke="#999" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></line><line x1="16" y1="6" x2="16" y2="18" stroke="#999" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></line></svg>
+        </label>
+        <label class="payment-option" for="pix" data-payment="Pix">
+          <input type="radio" id="pix" name="paymentMethod" value="Pix" />
+          Pix
+          <img src="Pix.png" alt="Ícone Pix" />
+        </label>
+      </div>
+
+      <button type="submit" aria-live="polite" aria-atomic="true" aria-label="Confirmar compra">
+        Confirmar Compra
+      </button>
+    </form>
+
+    <div
+      class="message"
+      id="confirmationMessage"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    ></div>
+  </main>
+
+  <script>
+    // Mostrar resumo do carrinho
+    const items = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const total = localStorage.getItem("cartTotal") || "0,00";
+    const cartSummary = document.getElementById("cartSummary");
+    const form = document.getElementById("paymentForm");
+    const messageDiv = document.getElementById("confirmationMessage");
+
+    if (items.length === 0) {
+      cartSummary.innerHTML = "<p>Seu carrinho está vazio.</p>";
+      form.style.display = "none";
+    } else {
+      let html = "<ul>";
+      items.forEach((item) => {
+        html += `<li>${item}</li>`;
+      });
+      html += "</ul>";
+      html += `<p class='total'>Total: R$ ${total.replace('.', ',')}</p>`;
+      cartSummary.innerHTML = html;
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const paymentMethod = form.paymentMethod.value;
+
+      if (paymentMethod === "Pix") {
+        // Substitua aqui pela sua chave Pix ou link de pagamento Pix válido
+        const pixLink = "https://pix.example.com/seu-pix-aqui";
+
+        window.open(pixLink, "_blank");
+
+        messageDiv.textContent = "Abra o aplicativo do seu banco para finalizar o pagamento via Pix.";
+      } else {
+        messageDiv.textContent = `Compra confirmada via ${paymentMethod}! Obrigado pela sua preferência.`;
+      }
+
+      // Limpar localStorage e formulário
+      localStorage.removeItem("cartItems");
+      localStorage.removeItem("cartTotal");
+      form.reset();
+
+      // Redirecionar para a loja após 5s para Pix, 3,5s para os outros
+      setTimeout(() => {
+        window.location.href = "products.html";
+      }, paymentMethod === "Pix" ? 5000 : 3500);
+    });
+  </script>
+</body>
+</html>
